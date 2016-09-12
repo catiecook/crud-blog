@@ -22,7 +22,8 @@
       <hr>
       <span>
         Comments ( {{@index}} )
-        <button class='btn btn-sm'>Comment</button>
+        <!-- eventually make this hotlink to comment form below-->
+        <button type='submit' class='btn btn-sm' action='/comments' method="post">Comment</button>
       </span>
     </div>
     <div class="col-md-2"></div>
@@ -30,6 +31,7 @@
   </div>
   <hr>
   <section class='comments'>
+
     <div class='row'>
       <div class='col-md-4'></div>
       <div class='col-md-4'>
@@ -38,7 +40,20 @@
         </p>
       </div>
       <div class='col-md-4'></div>
-
     </div>
+    <hr>
+  </section>
+
+  <section class='newComment'>
+
+    <form class='row' id='makeComment' action='/blog' method='post'>
+      <div class='col-md-4'></div>
+      <div class='col-md-8'>
+          <textarea type="text" class="form-control comment" name='newComment' placeholder="comment"></textarea>
+          <button type='submit' class='btn btn-sm' action='/blog' method="post">Place Comment</button>
+      </div>
+      <div class='col-md-4'></div>
+    </form>
+
   </section>
 </div>

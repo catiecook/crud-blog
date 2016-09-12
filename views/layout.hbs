@@ -49,43 +49,13 @@
 
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/logout">Logout, {{username}} </a></li>
               </ul>
 
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
-                <!-- <nav class='.nav'>
-          <table>
-            <tr>
-              {{#if index}}
-              {{/if}}
-              {{#if dashboard}}
-                <td> <a href="/dashboard" class="active"> Home </a> </td>
-                {{else}}
-                <td> <a href="/dashboard"> Home </a> </td>
-              {{/if}}
+            </div> <!-- /.navbar-collapse -->
+          </div> <!-- /.container-fluid -->
+        </nav> <!-- <nav class='.nav'-->
 
-              {{#if blog}}
-                <td> <a href="/blog" class="active"> Blog </a> </td>
-                {{else}}
-                <td> <a href="/blog"> Blog  </a> </td>
-              {{/if}}
-
-              {{#if post}}
-                <td> <a href="/post" class="active"> Post </a> </td>
-                {{else}}
-                <td> <a href="/post"> Post  </a> </td>
-              {{/if}}
-
-              {{#if logout}}
-                <td> <a href="/logout" class="active"> Logout </a> </td>
-                {{else}}
-                <td> <a href="/logout">Logout</a> </td>
-              {{/if}}
-            </tr>
-          </table>
-        </nav> -->
         {{{body}}}
 
       </body>

@@ -24,8 +24,10 @@ router.post('/register', function (req, res, next) {
     return;
   }
   res.redirect('/');
-})
+});
+//*********************
 
+//***** DASHBOARD ******
 router.get('/dashboard', function(req, res, next) {
   res.render('dashboard', {
     title: 'Tried That',
@@ -33,6 +35,13 @@ router.get('/dashboard', function(req, res, next) {
   });
 });
 
+router.post('/dashboard', function (req, res, next) {
+  console.log("made it to dashboard");
+  res.redirect('/dashboard');
+});
+//*********************
+
+//***** POSTS ******
 router.get('/post', function(req, res, next) {
   res.render('post', {
     title: 'Tried That',
@@ -40,15 +49,9 @@ router.get('/post', function(req, res, next) {
     post: true
   });
 });
+//*********************
 
-router.get('/comment', function(req, res, next) {
-  res.render('comment', {
-    title: 'Tried That',
-    subTitle: 'Comment on a Post',
-    comment: true
-  });
-});
-
+//***** BLOG STRING ******
 router.get('/blog', function(req, res, next) {
   res.render('blog', {
     title: 'Tried That',

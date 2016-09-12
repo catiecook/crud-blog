@@ -5,9 +5,12 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('posts', function(table){
     table.increments(); //post ID
-    table.string('users_id');//how do i make sure this is the same serialized ID from post table?
     table.string('title');
     table.text('body');
+    table.integer('user_id').references('id').inTable('users');
+    table.string('author_name').references('full_name').inTable('users');
+
+
     table.timestamp('UpdateTimestamp');
     table.timestamp('InsertTimestamp');
   })
