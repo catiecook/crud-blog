@@ -5,7 +5,6 @@ exports.up = function(knex, Promise) {
     table.increments(); //post ID
     table.text('body');
     table.integer('user_id').references('id').inTable('users');
-    table.string('author_name').references('full_name').inTable('users');
 
     table.timestamp('UpdateTimestamp');
     table.timestamp('InsertTimestamp');

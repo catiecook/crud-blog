@@ -1,6 +1,6 @@
 var passport = require("passport")
 var Local = require("passport-local")
-var users = require("./users")
+var users = require("./database/users")
 
 passport.use(new Local(function (username, password, done)
 {

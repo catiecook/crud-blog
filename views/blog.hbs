@@ -5,7 +5,7 @@
 
     <div class="col-md-8">
       <span>
-        <strong>Posted by: {{user}}</strong>
+        <strong>Posted by: {{this.user}}</strong>
         <hr>
       </span>
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tincidunt tellus sollicitudin neque dictum, et ornare nisl ornare. Pellentesque imperdiet maximus ligula, id accumsan sem malesuada ac. Suspendisse ac ligula a dolor suscipit pretium. Pellentesque auctor euismod augue, sit amet sodales justo blandit ac. Vestibulum porttitor eros eu nulla interdum, et mattis ante efficitur. Nunc condimentum mattis sem et euismod.
@@ -21,7 +21,15 @@
       </p>
       <hr>
       <span>
+        {{#if comments}}
+
         Comments ( {{@index}} )
+
+        {{else}}
+
+        No Comments Yet!
+
+        {{/if}}
         <!-- eventually make this hotlink to comment form below-->
         <button type='submit' class='btn btn-sm' action='/comments' method="post">Comment</button>
       </span>
@@ -35,7 +43,7 @@
     <div class='row'>
       <div class='col-md-4'></div>
       <div class='col-md-4'>
-        <h5>UserName</h5>
+        <h5>{{this.username}}</h5>
         <p>Etiam ornare congue elit, vitae molestie ligula condimentum quis. Quisque placerat neque eu interdum pulvinar. Ut a eleifend nunc, eget fringilla sapien. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Pellentesque ac justo viverra, tristique erat nec, viverra neque. Sed tempor mi interdum massa placerat, ut fringilla turpis imperdiet. Integer turpis purus, egestas eget ullamcorper vel, luctus eu nibh
         </p>
       </div>
@@ -43,7 +51,7 @@
     </div>
     <hr>
   </section>
-
+<!-- find library for hot button scrolling -->
   <section class='newComment'>
 
     <form class='row' id='makeComment' action='/blog' method='post'>

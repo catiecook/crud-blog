@@ -6,8 +6,6 @@ exports.up = function(knex, Promise) {
     table.increments(); //ID
     table.string('username');
     table.string('password');
-    table.string('full_name')
-    table.integer('post_id').references('id').inTable('posts'); //how do i make sure this is the same serialized ID from post table?
   });
 };
 
