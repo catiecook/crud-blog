@@ -13,6 +13,10 @@ router.get('/', function(req, res, next) {
   })
 });
 
+//*********************
+
+//***** LOGIN ******
+
 router.get('/login', function(req, res, next) {
   res.render('login', {
     title: 'Tried That',
@@ -31,6 +35,9 @@ router.post('/login', function(req, res, next){
       }
     })
 });
+//*********************
+
+//***** REGISTER ******
 
 router.get('/register', function(req, res, next){
   res.render('register', {
@@ -57,6 +64,7 @@ router.post('/register', function (req, res, next) {
 //*********************
 
 //***** DASHBOARD ******
+
 router.get('/dashboard', function(req, res, next) {
   query.getPostTitle().select()
   .then(function(data){
@@ -83,16 +91,20 @@ router.get('/post', function(req, res, next) {
   });
 });
 
-  router.post('/post', function(req, res, next) {
+router.post('/post', function(req, res, next) {
+  if(req.body.title && req.body.body){
     query.newPost(req.body.title, req.body.body, req.body.user_id)
-    .then(function(){
-      res.redirect('/blog')
-    })
-    .catch(function(){
-      res.send('Yikes, that didn\'t work');
-    })
-
-  });
+      .then(function(){
+        res.redirect('/blog');
+      })
+      .catch(function(){
+        res.send('Yikes, that didn\'t work');
+      })
+  }
+  else {
+    req.send("You need to enter a title and body for the post");
+  }
+});
 
 //*********************
 
@@ -110,9 +122,17 @@ router.get('/blog/:id', function(req, res, next) {
     title: 'Tried That',
     blog: true,
     id: req.body.id,
-    postTitle: req.body.title,
-    postAuthor: req.body.user_id
+    postTitle: query.getPostTitle(),
+    postAuthor: query.getUserIdByPost()
   });
 });
+//*********************
+
+//***** LOGOUT ******
+router.post('/logout', function(req, res, next) {
+  res.render('logout', {
+    username: query.getUserName()
+  })
+})
 
 module.exports = router;

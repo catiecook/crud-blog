@@ -23,7 +23,7 @@ function getPostTitle() {
 }
 
 function newPost(title, body, user_id) {
-  knex('posts').insert({title: title, body: body, user_id: user_id});
+  return knex('posts').insert({title: title, body: body, user_id: user_id});
 }
 
 function deletePost(id) {
@@ -38,6 +38,13 @@ function getCommentUsername(user_id){
   return knex('users').innerJoin('comments', 'users.username').where('users.id', 'comments.user_id');
 }
 
+function getUserName(){
+  return knex('users').select('id');
+}
+
+function getUserIdByPost(){
+  return knex('posts').select('user_id');
+}
 function deleteComment(id) {
     return knex('comments').where('id', id).del();
 }
@@ -53,5 +60,6 @@ module.exports = {
   getPostByUser: getPostByUser,
   getPostByID: getPostByID,
   getPostByTitle: getPostByTitle,
-  returnAllPosts: returnAllPosts
+  returnAllPosts: returnAllPosts,
+  getUserName: getUserName
 }

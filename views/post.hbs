@@ -3,8 +3,8 @@
     <div class='col-md-2'></div>
 
     <div class='col-md-10'>
-      <form class="form-horizontal" id='post' action='/blog' method='post'>
 
+      <form class="form-horizontal" id='post' action='/post' method='post'>
         <div class="form-group">
           <h3 class='row specialh3'>New Post</h3>
           <label for="title" class="col-sm-2 control-label">Title</label>
@@ -14,9 +14,9 @@
         </div>
 
         <div class="form-group">
-          <label for="post" class="col-sm-2 control-label">Write Post</label>
+          <label for="body" class="col-sm-2 control-label">Write Post</label>
           <div class="col-sm-6">
-            <textarea type="text" class="form-control" id="post" name='post' placeholder="Blog post goes here...">
+            <textarea type="text" class="form-control" id="body" name='body' placeholder="Blog post goes here...">
             </textarea>
           </div>
         </div>
@@ -26,7 +26,7 @@
         </div>
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <input type="submit" action='/post' method='post' class="btn btn-default" value='Make Post'></input>
+            <input type="submit" class="btn btn-default" value='Make Post'></input>
           </div>
         </div>
       </form>
