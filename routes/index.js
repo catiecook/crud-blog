@@ -144,16 +144,19 @@ router.get('/single-blog/:id', function(req, res, next) {
 });
 
 router.post('/single-blog/:id', function(req, res, next) {
-    console.log('Creating Comment')
-    console.log(req.user);
-
-    query.newComment(req.body.user_id, req.body.body)
+  if(req.isAuthenticated()){
+    query.newComment(req.user.id, req.body.body)
     .then(function(){
       console.log('inside creating Comment')
-      res.redirect('/single-blog/:id')
-    }).catch(function(err){
+      res.redirect('/single-blog/'+ req.params.id)
+    })
+    .catch(function(err) {
       next(err)
     })
+  }
+  else {
+    res.redirect('/')
+  }
   });
 
 // *********************
