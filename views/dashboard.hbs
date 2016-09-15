@@ -1,43 +1,22 @@
   <div class='container-fluid'>
-      <h3 class="text-uppercase">Recent Posts</h3>
+
       <hr>
-
-      <div class="col-md-2">
-      </div>
-
-      <div class="col-md-8">
-        <div class="col-md-8">
-          {{#each posts}}
-           <h2>Title: {{this.title}}</h2>
-           <a href='/blog/{{this.id}}'>See more</a>
-          {{/each}}
-        </div>
-        <!-- <div class="row">
-          <h4>Post Title 1 </h4>
+      <div class="row">
+        <div class="col-md-2"><h4 class="text-uppercase">Recent Posts</h4></div>
           <div class="col-md-8">
-            <p>Vestibulum bibendum mauris pellentesque, convallis massa volutpat, commodo ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-            <h6>Posted By:username</h6>
-          </div>
-        </div>
-
-        <div class="row">
-        <h5>Post Title 2 </h5>
-          <div class="col-md-8">
-            <p>Vestibulum bibendum mauris pellentesque, convallis massa volutpat, commodo ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-            <h6>Posted By:username</h6>
-          </div>
-        </div>
-
-        <div class="row">
-        <h5>Post Title 3 </h5>
-          <div class="col-md-8">
-            <p>Vestibulum bibendum mauris pellentesque, convallis massa volutpat, commodo ex. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-            <h6>Posted By: username</h6>
-          </div>
-        </div> -->
-
-      </div>
-      <div class="col-md-2">
-      </div>
-
+              {{#each preview}}
+                <div class='row'>
+                  <div class:'col-md-2'>
+                  </div>
+                  <div class="col-md">
+                    <h2> <a href="/single-blog/{{id}}">{{title}} </a> </h2>
+                    <br>
+                    <img src="{{image}}">
+                    <!-- <span class='right-aligned'><a href='/blog/{{id}}'> Read More...</a></span> -->
+                  </div>
+                  <div class:'col-md-2'>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
   </div>

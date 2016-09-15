@@ -4,7 +4,7 @@ var users = require("./database/users")
 
 passport.use(new Local(function (username, password, done)
 {
-  var verified = users.authenticate(username, password)
+  var verified = users.authenticateUsers(username, password)
   if (!verified)
   {
     done(null, false)

@@ -24,12 +24,14 @@ router.get('/login', function(req, res, next) {
   })
 });
 
+
 router.post('/login', function(req, res, next){
   users.authenticateUser(req.body.username, req.body.password)
     .then(function(authenticated){
        if(authenticated) {
          res.redirect('/dashboard');
        }
+
       else {
         res.send('Sorry, that is not a correct username and/or password')
       }
@@ -66,12 +68,12 @@ router.post('/register', function (req, res, next) {
 //***** DASHBOARD ******
 
 router.get('/dashboard', function(req, res, next) {
-  query.getPostTitle().select()
-  .then(function(data){
+  query.returnPostTitleAndImageAndId()
+  .then(function(titleAndImage){
     res.render('dashboard', {
-      title: 'Tried That',
-      dashboard: true,
-      blogs: data
+    title: 'Tried That',
+    blog: true,
+    preview: titleAndImage
     })
   })
 });
@@ -93,7 +95,7 @@ router.get('/post', function(req, res, next) {
 
 router.post('/post', function(req, res, next) {
   if(req.body.title && req.body.body){
-    query.newPost(req.body.title, req.body.body, req.body.user_id)
+    query.newPost(req.body.title, req.body.body, req.body.image, req.body.user_id)
       .then(function(){
         res.redirect('/blog');
       })
@@ -110,29 +112,57 @@ router.post('/post', function(req, res, next) {
 
 //***** BLOG STRING ******
 router.get('/blog', function(req, res, next) {
-  res.render('blog', {
-    title: 'Tried That',
-    blog: true
-  })
-});
-
-
-router.get('/blog/:id', function(req, res, next) {
-  res.render('blog', {
+  query.returnAllPosts()
+  .then(function(allBlogs){
+    res.render('blog', {
     title: 'Tried That',
     blog: true,
-    id: req.body.id,
-    postTitle: query.getPostTitle(),
-    postAuthor: query.getUserIdByPost()
-  });
-});
-//*********************
-
-//***** LOGOUT ******
-router.post('/logout', function(req, res, next) {
-  res.render('logout', {
-    username: query.getUserName()
+    blogs: allBlogs
+    })
   })
-})
+});
+
+
+//******* SINGLE BLOG PAGE *********
+
+router.get('/single-blog/:id', function(req, res, next) {
+  console.log('trying to reload comments')
+  query.returnPostByID(req.params.id)
+  .then(function(singlePost) {
+    res.render('single-blog', {
+      title: 'Tried That',
+      blogs: singlePost
+    })
+  })
+});
+//return comments
+router.get('/single-blog/:id', function(req, res, next) {
+  query.getComment()
+  .then(function(comment){
+    res.render({comment: comment})
+  })
+});
+
+router.post('/single-blog/:id', function(req, res, next) {
+    console.log('Creating Comment')
+    console.log(req.user);
+
+    query.newComment(req.body.user_id, req.body.body)
+    .then(function(){
+      console.log('inside creating Comment')
+      res.redirect('/single-blog/:id')
+    }).catch(function(err){
+      next(err)
+    })
+  });
+
+// *********************
+
+//***** nav on all pages ******
+// router.get('/:all', function(req, res, next) {
+//   res.render('/:all', {
+//     username: query.getUserName()
+//   })
+// })
 
 module.exports = router;

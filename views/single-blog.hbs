@@ -1,0 +1,47 @@
+
+<div class='container-fluid'>
+
+  <div class="row">
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+        {{#each blogs}}
+          <div class='row'>
+            <div class:'col-md-2'>
+            </div>
+            <div class="col-md">
+              <h2>{{title}}</h2>
+              <!-- <strong>Posted by: {{user_id}}</strong> -->
+              <br>
+              <img src="{{image}}">
+              <p>{{body}}</p>
+            </div>
+          <div class:'col-md-2'>
+          </div>
+          <hr>
+            {{#if comment}}
+
+              <p>Comments ( {{@index}} )</p>
+              <div class='col-md=8'>
+                {{comment}}
+                <br>
+              </div>
+
+            {{else}}
+              <p class:'col-md'>No Comments Yet!</p>
+              <br>
+            {{/if}}
+
+          <form class='form-horizontal' action='/single-blog/{{id}}' method="post">
+            <textarea type="text" class="form-control comment" name='newComment' placeholder="Make a comment"></textarea>
+            <button type='submit' class='btn btn-sm'>Comment</button>
+          </form>
+            <!-- eventually make this hotlink to comment form below-->
+
+
+        <div class="col-md-2"></div>
+      </div>
+    {{/each}}
+    </div>
+  </div>
+</div>

@@ -1,37 +1,33 @@
 var knex = require('./knex');
 var users = require('./users');
 
-
 function returnAllPosts() {
-  return knex('posts');
+  return knex('posts').select('id', 'title', 'body', 'image', 'user_id').orderBy('id', 'desc');
 }
 
-function getPostByID(id) {
-  return knex('posts').select('id', 'title', 'body', 'user_id').where('id', id);
+function returnPostByID(id) {
+  return knex('posts').select('id', 'title', 'body', 'image', 'user_id').where('id', id);
 }
 
-function getPostByTitle(title) {
-  return knex('posts').select('id', 'title', 'body', 'user_id').where('title', title);
+function returnPostTitleAndImageAndId() {
+  return knex('posts').select('id', 'title', 'image').orderBy('id', 'desc');
 }
 
-function getPostByUser(username) {
-  return knex('posts').select('id', 'title', 'body', 'user_id').where('id', user_id);
-}
-
-function getPostTitle() {
-  return knex('posts').select('title');
-}
-
-function newPost(title, body, user_id) {
-  return knex('posts').insert({title: title, body: body, user_id: user_id});
+function newPost(title, body, image, user_id) {
+  return knex('posts').insert({title: title, body: body, image: image, user_id: user_id});
 }
 
 function deletePost(id) {
   return knex('posts').where('id', id).del();
 }
 
-function newComment(user_id, id, body) {
-  return knex('comments').insert({user_id:user_id, id:id, body:body});
+//COMMENTS
+function getComment() {
+  return knex('comments').select('id', 'user_id', 'body')
+}
+
+function newComment(user_id, body) {
+  return knex('comments').insert({user_id:user_id, body:body});
 }
 
 function getCommentUsername(user_id){
@@ -39,11 +35,15 @@ function getCommentUsername(user_id){
 }
 
 function getUserName(){
+  return knex('users').select('username');
+}
+
+function getUserID() {
   return knex('users').select('id');
 }
 
-function getUserIdByPost(){
-  return knex('posts').select('user_id');
+function getUserIdByPost(postID){
+  return knex('posts').select('user_id').where('id', postID);
 }
 function deleteComment(id) {
     return knex('comments').where('id', id).del();
@@ -56,10 +56,10 @@ module.exports = {
   getCommentUsername: getCommentUsername,
   deletePost: deletePost,
   newPost: newPost,
-  getPostTitle: getPostTitle,
-  getPostByUser: getPostByUser,
-  getPostByID: getPostByID,
-  getPostByTitle: getPostByTitle,
+  returnPostByID: returnPostByID,
+  returnPostTitleAndImageAndId: returnPostTitleAndImageAndId,
   returnAllPosts: returnAllPosts,
-  getUserName: getUserName
+  getUserName: getUserName,
+  getUserIdByPost: getUserIdByPost,
+  gteComment: getComment
 }

@@ -40,7 +40,7 @@ section {
   margin-top: 4%;
 }
 
-.col-md-8 {
+.col-md{
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -70,4 +70,16 @@ section {
 
 .comment {
   margin: 0 8% 5%;
+}
+
+img {
+  max-width: 50vw;
+  margin-bottom: 5%;
+  align-self: center;
+}
+
+.right-aligned {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
