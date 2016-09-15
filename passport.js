@@ -4,13 +4,27 @@ var users = require("./database/users")
 
 passport.use(new Local(function (username, password, done)
 {
-  var verified = users.authenticateUsers(username, password)
-  if (!verified)
-  {
-    done(null, false)
-  }
-  var user = users.find(username)
-  done(null, user)
+  users.authenticateUser(username)
+
+  .then(function(userData){
+    console.log("USER DATA FROM PASSPORT", userData)
+    if(userData){
+      users.authenticatePassword(userData, password, function(err, res){
+        if(res){
+          done(null, userData)
+        }
+        else {
+          done(null, false)
+        }
+      }) //check if the password is correct
+    }
+    else {
+      done(null, false)
+    }
+  })
+  .catch(function(err){
+    done(err)
+  })
 }))
 
 passport.serializeUser(function (user, done)
@@ -20,8 +34,13 @@ passport.serializeUser(function (user, done)
 
 passport.deserializeUser(function (username, done)
 {
-  var user = users.find(username)
-  done(null, user)
-})
+  users.authenticateUser(username)
+  .then(function(userData){
+    done(null, userData)
+  })
+  .catch(function(err){
+    done(err)
+  })
+});
 
 module.exports = passport

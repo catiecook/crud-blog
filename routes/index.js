@@ -25,18 +25,12 @@ router.get('/login', function(req, res, next) {
 });
 
 
-router.post('/login', function(req, res, next){
-  users.authenticateUser(req.body.username, req.body.password)
-    .then(function(authenticated){
-       if(authenticated) {
-         res.redirect('/dashboard');
-       }
-
-      else {
-        res.send('Sorry, that is not a correct username and/or password')
-      }
-    })
-});
+router.post('/login', passport.authenticate('local', {
+  // users.authenticateUser(req.body.username, req.body.password)
+       successRedirect: '/dashboard',
+       failureRedirect: '/'
+     })
+    );
 //*********************
 
 //***** REGISTER ******
@@ -68,14 +62,20 @@ router.post('/register', function (req, res, next) {
 //***** DASHBOARD ******
 
 router.get('/dashboard', function(req, res, next) {
-  query.returnPostTitleAndImageAndId()
-  .then(function(titleAndImage){
-    res.render('dashboard', {
-    title: 'Tried That',
-    blog: true,
-    preview: titleAndImage
+  if(req.isAuthenticated()){
+    console.log("NAME NAME NAME", req.user);
+    query.returnPostTitleAndImageAndId()
+    .then(function(titleAndImage){
+      res.render('dashboard', {
+        title: 'Tried That',
+        dashboard: true,
+        preview: titleAndImage
+      })
     })
-  })
+  }
+  else {
+    res.redirect('/')
+  }
 });
 
 router.post('/dashboard', function (req, res, next) {

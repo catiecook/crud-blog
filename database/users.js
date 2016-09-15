@@ -12,27 +12,13 @@ function findUser(username) {
   return knex('users').select('username').where('username', username);
 }
 
-function authenticateUser(username, password) {
-
+function authenticateUser(username) {
   return knex('users').where('username', username).first()
-    .then(function(user){
-      if(user) {
-        if(password){
-          return  new Promise(function(resolve, reject){
-            bcrypt.compare(password, user.password, function(err, result){
-              if(err){
-                reject(err)
-              }
-              else { resolve(result) }
-            })
-          })
-        }
-      }
-      else {
-        return false
-      }
-    })
   }
+
+function authenticatePassword(userData, password, func) {
+  bcrypt.compare(password, userData.password, func);
+}
 
 function addUser(username, password) {
   return knex('users').insert({username: username, password: hashPassword(password)})
@@ -42,5 +28,6 @@ function addUser(username, password) {
 module.exports = {
   find: findUser,
   authenticateUser: authenticateUser,
+  authenticatePassword: authenticatePassword,
   addUser: addUser
 }
