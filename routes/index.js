@@ -56,6 +56,12 @@ router.post('/register', function (req, res, next) {
     req.send("you need to enter a username and password");
   }
 });
+//*********************
+//******* LOGOUT ******
+router.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 //*********************
 
@@ -63,12 +69,11 @@ router.post('/register', function (req, res, next) {
 
 router.get('/dashboard', function(req, res, next) {
   if(req.isAuthenticated()){
-    console.log("NAME NAME NAME", req.user);
+    console.log("Made it back to dashboard", req.user);
     query.returnPostTitleAndImageAndId()
     .then(function(titleAndImage){
       res.render('dashboard', {
         title: 'Tried That',
-        dashboard: true,
         preview: titleAndImage
       })
     })
@@ -79,33 +84,37 @@ router.get('/dashboard', function(req, res, next) {
 });
 
 router.post('/dashboard', function (req, res, next) {
-  // console.log("made it to dashboard");
   res.redirect('/dashboard')
 });
 //*********************
 
 //***** POSTS ******
 router.get('/post', function(req, res, next) {
-  res.render('post', {
-    title: 'Tried That',
-    subTitle: 'Create a Post',
-    post: true
-  });
+  if(req.isAuthenticated()){
+    res.render('post', {
+      title: 'Tried That',
+      subTitle: 'Create a Post',
+      post: true
+    });
+  }
+  else {
+    res.redirect('/');
+  }
 });
 
 router.post('/post', function(req, res, next) {
-  if(req.body.title && req.body.body){
-    query.newPost(req.body.title, req.body.body, req.body.image, req.body.user_id)
-      .then(function(){
-        res.redirect('/blog');
-      })
-      .catch(function(){
-        res.send('Yikes, that didn\'t work');
-      })
-  }
-  else {
-    req.send("You need to enter a title and body for the post");
-  }
+    if(req.body.title && req.body.body){
+      query.newPost(req.body.title, req.body.body, req.body.image, req.body.user_id)
+        .then(function(){
+          res.redirect('/blog');
+        })
+        .catch(function(){
+          res.send('Yikes, that didn\'t work');
+        })
+    }
+    else {
+      req.send("You need to enter a title and body for the post");
+    }
 });
 
 //*********************
@@ -126,28 +135,35 @@ router.get('/blog', function(req, res, next) {
 //******* SINGLE BLOG PAGE *********
 
 router.get('/single-blog/:id', function(req, res, next) {
-  console.log('trying to reload comments')
   query.returnPostByID(req.params.id)
-  .then(function(singlePost) {
-    res.render('single-blog', {
-      title: 'Tried That',
-      blogs: singlePost
+  // let comments = query.getComment()
+  // Promise.all([post, comments])
+    .then(function(singlePost, comments) {
+      res.render('single-blog', {
+        title: 'Tried That',
+        blogs: singlePost
+      })
     })
-  })
 });
 //return comments
-router.get('/single-blog/:id', function(req, res, next) {
-  query.getComment()
-  .then(function(comment){
-    res.render({comment: comment})
-  })
-});
+// router.get('/single-blog/:id', function(req, res, next) {
+//   query.getComment()
+//   .then(function(comment){
+//     res.render({
+//       comments: comment
+//     })
+//   })
+// });
 
 router.post('/single-blog/:id', function(req, res, next) {
   if(req.isAuthenticated()){
-    query.newComment(req.user.id, req.body.body)
+    console.log("Catie")
+    console.log("comment: ", req.body.commentBody)
+    console.log("userid: ", req.user.id)
+    console.log("postID: ", req.params.id)
+
+    query.newComment(req.body.commentBody, req.user.id, req.params.id)
     .then(function(){
-      console.log('inside creating Comment')
       res.redirect('/single-blog/'+ req.params.id)
     })
     .catch(function(err) {
@@ -158,14 +174,5 @@ router.post('/single-blog/:id', function(req, res, next) {
     res.redirect('/')
   }
   });
-
-// *********************
-
-//***** nav on all pages ******
-// router.get('/:all', function(req, res, next) {
-//   res.render('/:all', {
-//     username: query.getUserName()
-//   })
-// })
 
 module.exports = router;

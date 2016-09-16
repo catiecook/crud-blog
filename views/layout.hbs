@@ -28,28 +28,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
               <ul class="nav navbar-nav">
-
-                {{#if dashboard}}
-                  <li class="active"><a href="/dashboard">Home</a></li>
-                {{else}}
                 <li><a href="/dashboard">Home</a></li>
-                {{/if}}
-
-                {{#if blog}}
-                  <li class='active'><a href="/blog">Blogs</a></li>
-                {{else}}
-                  <li><a href="/blog">Blogs</a></li>
-                {{/if}}
-
-                {{#if post}}
-                <li class='active'><a href="/post">Post</a></li>
-                {{else}}
+                <li><a href="/blog">Blogs</a></li>
                 <li><a href="/post">Post</a></li>
-                {{/if}}
-
               </ul>
+
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/">Logout, {{username}} </a></li>
+                <li><a href="/logout">Logout, {{username}} </a></li>
               </ul>
 
             </div> <!-- /.navbar-collapse -->

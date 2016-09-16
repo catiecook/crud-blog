@@ -23,11 +23,11 @@ function deletePost(id) {
 
 //COMMENTS
 function getComment() {
-  return knex('comments').select('id', 'user_id', 'body')
+  return knex('comments').select('id', 'body', 'user_id', 'post_id')
 }
 
-function newComment(user_id, body) {
-  return knex('comments').insert({user_id:user_id, body:body});
+function newComment(body, user_id, post_id) {
+  return knex('comments').insert({user_id:user_id, body:body, post_id: post_id});
 }
 
 function getCommentUsername(user_id){
@@ -61,5 +61,5 @@ module.exports = {
   returnAllPosts: returnAllPosts,
   getUserName: getUserName,
   getUserIdByPost: getUserIdByPost,
-  gteComment: getComment
+  getComment: getComment
 }
