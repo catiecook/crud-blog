@@ -42,9 +42,8 @@ router.get('/register', function(req, res, next){
 });
 
 router.post('/register', function (req, res, next) {
+  console.log("made it to registration ")
   if (req.body.username && req.body.password) {
-    console.log("made it to registration ")
-
     users.addUser(req.body.username, req.body.password)
     .then(function(){
       res.redirect('/dashboard');
