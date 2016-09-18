@@ -4,7 +4,6 @@ var passport = require('../passport');
 var users = require('../database/users');
 var query = require('../database/query');
 
-
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', {
@@ -128,7 +127,8 @@ router.get('/blog', function(req, res, next) {
       title: 'Tried That',
       loginUser: req.user.username,
       blog: true,
-      blogs: allBlogs
+      blogs: allBlogs,
+      id: req.params.id
     })
   })
   .catch(function(err) {
@@ -143,6 +143,7 @@ router.get('/single-blog/:id', function(req, res, next) {
       return query.getCommentsandUserName(req.params.id)
       .then(function(comments){
         console.log(singlePost)
+
           res.render('single-blog', {
             title: 'Tried That',
             blogs: singlePost,
@@ -150,6 +151,7 @@ router.get('/single-blog/:id', function(req, res, next) {
             id: req.params.id,
             comments: comments,
           })
+          console.log(req.params.id);
         })
       })
       .catch(function(err) {
@@ -172,8 +174,7 @@ router.post('/single-blog/:id', function(req, res, next) {
   }
   });
 
-//******* EDIT POST ********
-
+//******* EDIT/UPDATE POST ********
 router.get('/updatepost/:id', function(req, res, next){
   query.returnPostByID(req.params.id)
     .then(function(data){
@@ -236,10 +237,11 @@ router.get('/single-blog/:id/remove', function(req, res, next){
 })
 
 router.get('/single-blog/:id/remove-comment', function(req, res, next){
+  console.log("The post id is ", req.params.id)
   if(req.isAuthenticated()){
     query.getUserIdByPost(req.params.id).first()
     .then(function(poster_id) {
-      console.log(req.user.id, 'equals', poster_id.user_id)
+
       if(req.user.id === poster_id.user_id) {
         return query.deleteComment(req.params.id)
         .then(function(){
