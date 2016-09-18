@@ -35,8 +35,6 @@ router.post('/login', passport.authenticate('local', {
 //***** REGISTER ******
 
 router.get('/register', function(req, res, next){
-  console.log("made it to registration ")
-
   res.render('register', {
     title: 'Tried That',
     register: true
@@ -65,16 +63,6 @@ router.get('/logout', function(req, res){
 });
 //********************
 
-//***** LAYOUT FOR ALL *******
-// router.get('/:all', function(req, res, next){
-//   console.log(req.user.username)
-//   res.render('/:all', {
-//     username: req.user.username
-//   })
-// })
-//********************
-
-
 //***** DASHBOARD ******
 router.get('/dashboard', function(req, res, next) {
   if(req.isAuthenticated()){
@@ -98,7 +86,7 @@ router.post('/dashboard', function (req, res, next) {
 });
 //*********************
 
-//***** POSTS ******
+//***** MAKE A POST ******
 router.get('/post', function(req, res, next) {
   if(req.isAuthenticated()){
     res.render('post', {
@@ -130,7 +118,7 @@ router.post('/post', function(req, res, next) {
 
 //*********************
 
-//***** BLOG STRING ******
+//***** VIEW BLOG STRING ******
 router.get('/blog', function(req, res, next) {
   query.returnAllPosts()
 
@@ -147,7 +135,6 @@ router.get('/blog', function(req, res, next) {
     next(err)
   })
 });
-
 
 //******* SINGLE BLOG PAGE *********
 router.get('/single-blog/:id', function(req, res, next) {
@@ -186,20 +173,20 @@ router.post('/single-blog/:id', function(req, res, next) {
   });
 
 //******* EDIT POST ********
-// router.post('/updatepost/:id', function(req, res, next){
-//     res.redirect('/updatepost/'+ req.params.id)
-//   })
 
 router.get('/updatepost/:id', function(req, res, next){
   query.returnPostByID(req.params.id)
     .then(function(data){
+      console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
+
       res.render('updatepost', {
         data: data,
         body: data[0].body,
         image: data[0].image,
         title: data[0].title,
         username: data[0].username,
-        loginUser: req.user.username
+        loginUser: req.user.username,
+        id: req.params.id
       })
     })
     .catch(function(err) {
@@ -207,10 +194,11 @@ router.get('/updatepost/:id', function(req, res, next){
     })
 });
 
-router.post('/updatepost/repost/:id', function(req, res, next) {
+router.post('/updatepost/:id/repost', function(req, res, next) {
+  console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
+
   query.updatePost(req.params.id, req.body.body, req.body.title, req.body.image)
     .then(function() {
-      console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
       res.redirect('/single-blog/'+ req.params.id)
     })
 
