@@ -4,6 +4,7 @@ var config = require('../knexfile.js')[environment];
 
 //pull in database -- code form dannys example
 // pg.default.ssl = true;
+//
 // pg.connect(process.env.DATABASE_URL, function(err, client){
 //   if (err) throw err;
 //   console.log('Connected to postgres, gathering schemas...');

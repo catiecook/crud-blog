@@ -21,5 +21,19 @@
     "passport-local": "^1.0.0",
     "pg": "^6.1.0",
     "serve-favicon": "~2.3.0"
-  }
+  },
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/catiecook/crud-blog.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/catiecook/crud-blog/issues"
+  },
+  "homepage": "https://github.com/catiecook/crud-blog#readme",
+  "description": ""
 }

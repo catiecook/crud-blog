@@ -43,6 +43,8 @@ router.get('/register', function(req, res, next){
 
 router.post('/register', function (req, res, next) {
   if (req.body.username && req.body.password) {
+    console.log("made it to registration ")
+
     users.addUser(req.body.username, req.body.password)
     .then(function(){
       res.redirect('/dashboard');
@@ -199,16 +201,16 @@ router.get('/updatepost/:id', function(req, res, next){
         username: data[0].username,
         loginUser: req.user.username
       })
-      console.log("THE TITLE IS ", data[0].title)
     })
     .catch(function(err) {
       next(err)
     })
 });
 
-router.post('/updatepost/:id/repost', function(req, res, next) {
+router.post('/updatepost/repost/:id', function(req, res, next) {
   query.updatePost(req.params.id, req.body.body, req.body.title, req.body.image)
     .then(function() {
+      console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
       res.redirect('/single-blog/'+ req.params.id)
     })
 
