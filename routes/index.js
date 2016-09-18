@@ -35,6 +35,8 @@ router.post('/login', passport.authenticate('local', {
 //***** REGISTER ******
 
 router.get('/register', function(req, res, next){
+  console.log("made it to registration ")
+
   res.render('register', {
     title: 'Tried That',
     register: true
@@ -42,7 +44,6 @@ router.get('/register', function(req, res, next){
 });
 
 router.post('/register', function (req, res, next) {
-  console.log("made it to registration ")
   if (req.body.username && req.body.password) {
     users.addUser(req.body.username, req.body.password)
     .then(function(){
