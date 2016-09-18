@@ -140,7 +140,7 @@ router.get('/blog', function(req, res, next) {
 router.get('/single-blog/:id', function(req, res, next) {
   query.returnPostByID(req.params.id)
     .then(function(singlePost){
-      return query.getCommentsandUserName(req.params.id)
+      return query.getCommentsAndUserName(req.params.id)
       .then(function(comments){
         console.log(singlePost)
 
@@ -151,7 +151,6 @@ router.get('/single-blog/:id', function(req, res, next) {
             id: req.params.id,
             comments: comments,
           })
-          console.log(req.params.id);
         })
       })
       .catch(function(err) {
@@ -178,8 +177,6 @@ router.post('/single-blog/:id', function(req, res, next) {
 router.get('/updatepost/:id', function(req, res, next){
   query.returnPostByID(req.params.id)
     .then(function(data){
-      console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
-
       res.render('updatepost', {
         data: data,
         body: data[0].body,
@@ -196,8 +193,6 @@ router.get('/updatepost/:id', function(req, res, next){
 });
 
 router.post('/updatepost/:id/repost', function(req, res, next) {
-  console.log("SHOULD BE SHOWING ID NUM ", req.params.id)
-
   query.updatePost(req.params.id, req.body.body, req.body.title, req.body.image)
     .then(function() {
       res.redirect('/single-blog/'+ req.params.id)
@@ -237,16 +232,18 @@ router.get('/single-blog/:id/remove', function(req, res, next){
 })
 
 router.get('/single-blog/:id/remove-comment', function(req, res, next){
-  console.log("The post id is ", req.params.id)
   if(req.isAuthenticated()){
     query.getUserIdByPost(req.params.id).first()
     .then(function(poster_id) {
-
       if(req.user.id === poster_id.user_id) {
-        return query.deleteComment(req.params.id)
-        .then(function(){
-            res.redirect('/single-blog/'+ req.params.id)
+        return query.getCommentID(req.params.id)
+        .then(function(comment_id){
+          return query.deleteComment(comment_id[0].id)
+          .then(function(){
+              res.redirect('/single-blog/'+ req.params.id)
+          })
         })
+
       }
       else {
         res.redirect('/single-blog/' + req.params.id)
