@@ -7,7 +7,7 @@
         <div class:'col-md-2'></div>
         <div class="col-md">
           <h2>{{title}}</h2>
-          <strong>Posted by: {{user_id}} </strong>
+          <strong>Posted by: {{username}} </strong>
           <br>
           <img src="{{image}}">
           <p>{{body}}</p>
@@ -15,11 +15,10 @@
         <div class:'col-md-2'></div>
         <hr>
         <span>
-          <a href='/edit/{{id}}'>Edit Post</a>
-          <a href='/delete'>Delete Post</a>  
+          <a href='/updatepost/{{id}}'>Edit Post</a>
+          <a href='/single-blog/{{id}}/remove'>Delete Post</a>
         </span>
         <hr>
-
       {{/each}}
 
     </div>
@@ -28,18 +27,18 @@
 
   <div class="row">
     <div class="col-md-2"></div>
-    <div class="col-md-10">
+    <div class="col-md-8">
       <!-- <p>Comments ( {{comments.length}} )</p> -->
-      <p> Comments </p>
+      <h4> Comments </h4>
 
       {{#each comments}}
-        <strong>Posted by: {{user_id}}</strong>
+        <strong>Posted by: {{username}}</strong>
         <p>{{body}}</p>
+        <h5><a href='/single-blog/{{id}}/remove-comment'>Delete Comment</a></h5>
       {{/each}}
       <br>
     </div>
   </div>
-
 
     <div class="row">
       <div class="col-md-4"></div>
@@ -48,7 +47,7 @@
     <form class="form-horizontal" action='/single-blog/{{id}}' method='post'>
 
       <div class="form-group">
-        <h4 class='row specialh3'>Create Comment</h4>
+        <h4>Create Comment</h4>
         <div class="col-sm-6">
           <textarea type="text" class="form-control" id="body" name='commentBody' placeholder="Comment goes here...Be nice"></textarea>
         </div>

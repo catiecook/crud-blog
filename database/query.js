@@ -2,11 +2,11 @@ var knex = require('./knex');
 var users = require('./users');
 
 function returnAllPosts() {
-  return knex('posts').select('id', 'title', 'body', 'image', 'user_id').orderBy('id', 'desc');
+  return knex('posts').select('posts.id', 'title', 'body', 'image', 'user_id', 'username').join('users', 'posts.user_id', 'users.id').orderBy('posts.id', 'desc');
 }
 
-function returnPostByID(id) {
-  return knex('posts').select('id', 'title', 'body', 'image', 'user_id').where('id', id);
+function returnPostByID(post_id) {
+  return knex('posts').select('posts.id', 'title', 'body', 'image', 'user_id', 'username').join('users', 'posts.user_id', 'users.id').where('posts.id', post_id);
 }
 
 function returnPostTitleAndImageAndId() {
@@ -14,7 +14,7 @@ function returnPostTitleAndImageAndId() {
 }
 
 function newPost(title, body, image, user_id) {
-  return knex('posts').insert({title: title, body: body, image: image, user_id: user_id});
+  return knex('posts').insert({'title': title, 'body': body, 'image': image, 'user_id': user_id});
 }
 
 function deletePost(id) {
@@ -22,8 +22,8 @@ function deletePost(id) {
 }
 
 //COMMENTS
-function getComment() {
-  return knex('comments').select('id', 'body', 'user_id', 'post_id')
+function getCommentsandUserName(post_id) {
+  return knex('comments').select('body', 'user_id', 'username').join('users', 'user_id', 'users.id').where('post_id', post_id)
 }
 
 function newComment(body, user_id, post_id) {
@@ -31,7 +31,7 @@ function newComment(body, user_id, post_id) {
 }
 
 function getCommentUsername(user_id){
-  return knex('users').innerJoin('comments', 'users.username').where('users.id', 'comments.user_id');
+  return knex('users').join('comments', 'comments.user_id', 'users.id').select('username');
 }
 
 function getUserName(){
@@ -45,10 +45,21 @@ function getUserID() {
 function getUserIdByPost(postID){
   return knex('posts').select('user_id').where('id', postID);
 }
-function deleteComment(id) {
-    return knex('comments').where('id', id).del();
+function deleteComment(post_id) {
+    return knex('comments').where('id', post_id).del();
 }
 
+function deleteCommentsWithPost(post_id) {
+  return knex('comments').where('post_id', post_id).del();
+}
+
+function deletePost(id) {
+  return knex('posts').where('id', id).del();
+}
+
+function updatePost(post_id, newBody, newTitle, newImage) {
+  return knex('posts').where('id', post_id).update({'title': newTitle, 'body': newBody, 'image': newImage})
+}
 
 module.exports = {
   deleteComment: deleteComment,
@@ -61,5 +72,8 @@ module.exports = {
   returnAllPosts: returnAllPosts,
   getUserName: getUserName,
   getUserIdByPost: getUserIdByPost,
-  getComment: getComment
+  getCommentsandUserName: getCommentsandUserName,
+  deletePost: deletePost,
+  deleteCommentsWithPost: deleteCommentsWithPost,
+  updatePost: updatePost
 }

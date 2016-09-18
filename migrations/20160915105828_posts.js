@@ -4,10 +4,9 @@ exports.up = function(knex, Promise) {
     table.string('title');
     table.text('body');
     table.string('image');
-    table.integer('user_id').references('id').inTable('users');
+    table.integer('user_id').references('id').inTable('users').onDelete('CASCADE');
+    table.timestamps(true, true);
 
-    table.timestamp('created');
-    table.timestamp('updated');
   })
 };
 

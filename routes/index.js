@@ -26,7 +26,6 @@ router.get('/login', function(req, res, next) {
 
 
 router.post('/login', passport.authenticate('local', {
-  // users.authenticateUser(req.body.username, req.body.password)
        successRedirect: '/dashboard',
        failureRedirect: '/'
      })
@@ -62,11 +61,19 @@ router.get('/logout', function(req, res){
   req.logout();
   res.redirect('/');
 });
+//********************
 
-//*********************
+//***** LAYOUT FOR ALL *******
+// router.get('/:all', function(req, res, next){
+//   console.log(req.user.username)
+//   res.render('/:all', {
+//     username: req.user.username
+//   })
+// })
+//********************
+
 
 //***** DASHBOARD ******
-
 router.get('/dashboard', function(req, res, next) {
   if(req.isAuthenticated()){
     console.log("Made it back to dashboard", req.user);
@@ -74,7 +81,8 @@ router.get('/dashboard', function(req, res, next) {
     .then(function(titleAndImage){
       res.render('dashboard', {
         title: 'Tried That',
-        preview: titleAndImage
+        preview: titleAndImage,
+        loginUser: req.user.username
       })
     })
   }
@@ -94,6 +102,7 @@ router.get('/post', function(req, res, next) {
     res.render('post', {
       title: 'Tried That',
       subTitle: 'Create a Post',
+      loginUser: req.user.username,
       post: true
     });
   }
@@ -104,7 +113,7 @@ router.get('/post', function(req, res, next) {
 
 router.post('/post', function(req, res, next) {
     if(req.body.title && req.body.body){
-      query.newPost(req.body.title, req.body.body, req.body.image, req.body.user_id)
+      query.newPost(req.body.title, req.body.body, req.body.image, req.user.id)
         .then(function(){
           res.redirect('/blog');
         })
@@ -122,46 +131,45 @@ router.post('/post', function(req, res, next) {
 //***** BLOG STRING ******
 router.get('/blog', function(req, res, next) {
   query.returnAllPosts()
+
   .then(function(allBlogs){
+    // console.log(allBlogs)
     res.render('blog', {
-    title: 'Tried That',
-    blog: true,
-    blogs: allBlogs
+      title: 'Tried That',
+      loginUser: req.user.username,
+      blog: true,
+      blogs: allBlogs
     })
+  })
+  .catch(function(err) {
+    next(err)
   })
 });
 
 
 //******* SINGLE BLOG PAGE *********
-
 router.get('/single-blog/:id', function(req, res, next) {
   query.returnPostByID(req.params.id)
-  // let comments = query.getComment()
-  // Promise.all([post, comments])
-    .then(function(singlePost, comments) {
-      res.render('single-blog', {
-        title: 'Tried That',
-        blogs: singlePost
+    .then(function(singlePost){
+      return query.getCommentsandUserName(req.params.id)
+      .then(function(comments){
+        console.log(singlePost)
+          res.render('single-blog', {
+            title: 'Tried That',
+            blogs: singlePost,
+            loginUser: req.user.username,
+            id: req.params.id,
+            comments: comments,
+          })
+        })
       })
-    })
+      .catch(function(err) {
+        next(err)
+      })
 });
-//return comments
-// router.get('/single-blog/:id', function(req, res, next) {
-//   query.getComment()
-//   .then(function(comment){
-//     res.render({
-//       comments: comment
-//     })
-//   })
-// });
 
 router.post('/single-blog/:id', function(req, res, next) {
   if(req.isAuthenticated()){
-    console.log("Catie")
-    console.log("comment: ", req.body.commentBody)
-    console.log("userid: ", req.user.id)
-    console.log("postID: ", req.params.id)
-
     query.newComment(req.body.commentBody, req.user.id, req.params.id)
     .then(function(){
       res.redirect('/single-blog/'+ req.params.id)
@@ -174,5 +182,93 @@ router.post('/single-blog/:id', function(req, res, next) {
     res.redirect('/')
   }
   });
+
+//******* EDIT POST ********
+// router.post('/updatepost/:id', function(req, res, next){
+//     res.redirect('/updatepost/'+ req.params.id)
+//   })
+
+router.get('/updatepost/:id', function(req, res, next){
+  query.returnPostByID(req.params.id)
+    .then(function(data){
+      res.render('updatepost', {
+        data: data,
+        body: data[0].body,
+        image: data[0].image,
+        title: data[0].title,
+        username: data[0].username,
+        loginUser: req.user.username
+      })
+      console.log("THE TITLE IS ", data[0].title)
+    })
+    .catch(function(err) {
+      next(err)
+    })
+});
+
+router.post('/updatepost/:id/repost', function(req, res, next) {
+  query.updatePost(req.params.id, req.body.body, req.body.title, req.body.image)
+    .then(function() {
+      res.redirect('/single-blog/'+ req.params.id)
+    })
+
+    .catch(function(err) {
+      next(err)
+    })
+});
+
+//*******DELETE POSTS AND COMMENTS ********
+router.get('/single-blog/:id/remove', function(req, res, next){
+  if(req.isAuthenticated()){
+    query.getUserIdByPost(req.params.id).first()
+    .then(function(poster_id) {
+      console.log(req.user.id, 'equals', poster_id.user_id)
+      if(req.user.id === poster_id.user_id) {
+        return query.deletePost(req.params.id)
+        .then(function(){
+          return query.deleteCommentsWithPost(req.params.id)
+          .then(function(){
+            res.redirect('/blog')
+          })
+        })
+      }
+      else {
+        res.redirect('/blog')
+      }
+    })
+    .catch(function(err) {
+      next(err)
+    })
+  }
+  else {
+    res.redirect('/')
+  }
+})
+
+router.get('/single-blog/:id/remove-comment', function(req, res, next){
+  if(req.isAuthenticated()){
+    query.getUserIdByPost(req.params.id).first()
+    .then(function(poster_id) {
+      console.log(req.user.id, 'equals', poster_id.user_id)
+      if(req.user.id === poster_id.user_id) {
+        return query.deleteComment(req.params.id)
+        .then(function(){
+            res.redirect('/single-blog/'+ req.params.id)
+        })
+      }
+      else {
+        res.redirect('/single-blog/' + req.params.id)
+      }
+    })
+    .catch(function(err) {
+      next(err)
+    })
+  }
+  else {
+    res.redirect('/')
+  }
+})
+
+
 
 module.exports = router;
