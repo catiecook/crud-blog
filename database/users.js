@@ -1,6 +1,6 @@
 var bcrypt = require("bcrypt");
 var query = require('./query.js');
-var knex = require('knex')(config);
+var knex = require('./knex');
 
 function hashPassword(password) {
   return bcrypt.hashSync(password, 10)
