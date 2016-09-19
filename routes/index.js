@@ -46,8 +46,9 @@ router.post('/register', function (req, res, next) {
     .then(function(){
       res.redirect('/dashboard');
     })
-    .catch(function(){
-      res.send('Yikes, that didn\'t work');
+    .catch(function(err){
+      res.send(err, 'Yikes, that didn\'t work')
+
     });
   }
   else {
