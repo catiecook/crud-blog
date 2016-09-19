@@ -1,5 +1,5 @@
 var pg = require('pg');
-var environment = 'development';
+var environment = process.env.NODE_ENV || 'development';
 var config = require('../knexfile.js')[environment];
 
 //pull in database -- code form dannys example
