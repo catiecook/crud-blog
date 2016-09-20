@@ -1,20 +1,9 @@
-  <div class='container-fluid'>
-      <div class="row">
-        <div class="col-md-2"></div>
-          <div class="col-md-8">
-              {{#each preview}}
-                <div class='row'>
-                  <div class:'col-md-2'>
-                  </div>
-                  <div class="col-md">
-                    <h2> <a href="/single-blog/{{id}}"> {{title}} </a> </h2>
-                    <br>
-                    <img src="{{image}}">
-                    <!-- <span class='right-aligned'><a href='/blog/{{id}}'> Read More...</a></span> -->
-                  </div>
-                  <div class:'col-md-2'>
-                  </div>
-                </div>
-              {{/each}}
-            </div>
+<div class='container-fluid'>
+  <div class='card-columns'>
+      {{#each preview}}
+        <div class='card-block'>
+          <a href="/single-blog/{{id}}"> <img class='card-img-top' src="{{image}}" alt='image for blog'> </a>
+        </div>
+      {{/each}}
+    </div>
   </div>

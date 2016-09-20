@@ -8,7 +8,7 @@ var query = require('../database/query');
 router.get('/', function(req, res, next) {
   res.render('index', {
     title: 'Tried That',
-    index: true
+    index: true,
   })
 });
 
@@ -22,7 +22,6 @@ router.get('/login', function(req, res, next) {
     login: true
   })
 });
-
 
 router.post('/login', passport.authenticate('local', {
        successRedirect: '/dashboard',

@@ -40,7 +40,7 @@ section {
   margin-top: 4%;
 }
 
-.col-md{
+.col-md {
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -87,4 +87,18 @@ img {
 .centered {
   text-align: center;
   align-items: center;
+}
+
+.card-columns {
+  @include media-breakpoint-only(lg) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 5;
+  }
+}
+
+.blogBody {
+  height: 30%;
+  white-space: pre-line;
 }
