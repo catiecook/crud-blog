@@ -11,7 +11,6 @@ router.get('/', function(req, res, next) {
     index: true,
   })
 });
-
 //*********************
 
 //***** LOGIN ******
@@ -55,6 +54,7 @@ router.post('/register', function (req, res, next) {
   }
 });
 //*********************
+
 //******* LOGOUT ******
 router.get('/logout', function(req, res){
   req.logout();
@@ -114,10 +114,9 @@ router.post('/post', function(req, res, next) {
       req.send("You need to enter a title and body for the post");
     }
 });
-
 //*********************
 
-//***** VIEW BLOG STRING ******
+//***** VIEW ALL BLOGS ******
 router.get('/blog', function(req, res, next) {
   query.returnAllPosts()
 
@@ -135,6 +134,7 @@ router.get('/blog', function(req, res, next) {
     next(err)
   })
 });
+//*********************
 
 //******* SINGLE BLOG PAGE *********
 router.get('/single-blog/:id', function(req, res, next) {
@@ -172,8 +172,9 @@ router.post('/single-blog/:id', function(req, res, next) {
     res.redirect('/')
   }
   });
+//*********************
 
-//******* EDIT/UPDATE POST ********
+//******* EDIT POST ********
 router.get('/updatepost/:id', function(req, res, next){
   query.returnPostByID(req.params.id)
     .then(function(data){
@@ -202,6 +203,7 @@ router.post('/updatepost/:id/repost', function(req, res, next) {
       next(err)
     })
 });
+//*********************
 
 //*******DELETE POSTS AND COMMENTS ********
 router.get('/single-blog/:id/remove', function(req, res, next){
